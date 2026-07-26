@@ -73,18 +73,19 @@ const browser = await puppeteer.launch({
 /* Sign in once and reuse the cookie for the authenticated pages. */
 const auth = await browser.newPage()
 await auth.goto(`${BASE}/login`, { waitUntil: 'networkidle2' })
+// Credentials are passed in as arguments — `evaluate` runs in the page, which
+// has no access to this process's environment.
 await auth.evaluate(
-  async (base) => {
+  async (base, email, password) => {
     await fetch(`${base}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: 'demo@interiorstudio.app',
-        password: 'Studio2026',
-      }),
+      body: JSON.stringify({ email, password }),
     })
   },
   BASE,
+  process.env.AUDIT_EMAIL ?? 'demo@interiorstudio.app',
+  process.env.AUDIT_PASSWORD ?? 'Studio2026',
 )
 await auth.close()
 
