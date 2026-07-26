@@ -1,4 +1,6 @@
-.pgdata
-storage
-scripts/audit
-scripts/grade-preview.png
+# Anchored with a leading slash on purpose: an unanchored `storage` would also
+# match src/lib/storage/, which is application code.
+/.pgdata
+/storage
+/scripts/audit
+/scripts/grade-preview.png
