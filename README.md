@@ -266,6 +266,8 @@ npm run db:push               # or: npm run db:migrate
 npm run db:seed
 ```
 
+Seeding is a no-op when the database already has accounts — it wipes before it writes, so it must never run unattended against real data. Pass `--force` to reseed deliberately.
+
 The seed creates two accounts and twelve finished designs, deriving a matching "before" photograph
 from each generated render so the comparison slider has real paired images:
 
@@ -291,7 +293,8 @@ npm run dev                   # http://localhost:3000
 | `npm run lint` | ESLint (flat config, `next/core-web-vitals` + `next/typescript`) |
 | `npm run assets:generate` | Re-render all generated artwork |
 | `npm run db:server` | Embedded PostgreSQL for local development |
-| `npm run db:push` / `db:seed` / `db:reset` / `db:studio` | Schema and data |
+| `npm run db:push` / `db:seed` / `db:studio` | Local schema and demo data |
+| `npm run db:verify` | Apply migrations to a disposable empty database and prove they work |
 | `npm run test:smoke` | 58-check end-to-end suite against a running server |
 | `npm run test:sigv4` | Verify the SigV4 signer against AWS's reference vector |
 | `npm run test:browser` | Drive a real Chrome: console errors, overflow, screenshots at 3 viewports |
@@ -339,11 +342,19 @@ Three variables belong in **Project → Settings → Environment Variables**:
 | `DATABASE_URL` | A managed PostgreSQL. Adding **Neon** from the project's Storage tab sets this for you; append `?pgbouncer=true` when using the pooled endpoint. |
 | `NEXT_PUBLIC_APP_URL` | Canonical origin for Open Graph tags, the sitemap and share links. |
 
-Apply the schema to it once, from a machine that can reach it:
+**The schema applies itself.** `npm run build` runs `prisma migrate deploy` before `next build`, so
+a deploy brings the database up to date using the credential the build already holds — which matters
+because managed integrations often mark their connection strings *sensitive*, meaning they cannot be
+read back and the schema cannot be pushed from a developer machine at all.
+
+That step only runs on a deploy build (`VERCEL` or `CI` set), never on a local `npm run build`, and
+it prefers `DATABASE_URL_UNPOOLED` when the platform exposes one: a pooled endpoint cannot take the
+advisory locks the migration engine needs.
+
+Verify a migration before shipping it:
 
 ```bash
-DATABASE_URL="<production url>" npx prisma db push
-DATABASE_URL="<production url>" npx tsx prisma/seed.ts   # optional demo data
+npm run db:verify   # applies prisma/migrations to a disposable empty database
 ```
 
 **Uploads need object storage.** A serverless filesystem is ephemeral, so
