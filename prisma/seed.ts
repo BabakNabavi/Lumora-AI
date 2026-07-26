@@ -67,6 +67,20 @@ async function stripBack(source: Buffer): Promise<Buffer> {
 /* ── seed ─────────────────────────────────────────────────────────────────── */
 
 async function main() {
+  // This seed wipes before it writes, so it must never run unattended against a
+  // database that already holds accounts — a redeploy would destroy real users.
+  // It no-ops unless the database is empty, and `--force` is required to
+  // override that from a terminal.
+  const force = process.argv.includes('--force')
+  const existingUsers = await db.user.count()
+
+  if (existingUsers > 0 && !force) {
+    console.log(
+      `· ${existingUsers} account(s) already present — skipping seed. Pass --force to reseed.`,
+    )
+    return
+  }
+
   if (!existsSync(path.join(GENERATED, 'manifest.json'))) {
     throw new Error(
       'Generated artwork is missing. Run `npm run assets:generate` first.',
