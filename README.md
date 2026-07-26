@@ -8,6 +8,8 @@ Upload a photograph of a room, choose a style, palette, lighting and mood, and g
 interior back — with a side-by-side comparison, a written design rationale, and a workspace to keep
 it all in.
 
+**[Live demo](https://lumora-ai-sigma.vercel.app)** · **[Repository](https://github.com/BabakNabavi/Lumora-AI)**
+
 </div>
 
 ---
@@ -325,19 +327,38 @@ npm run start
 The build runs the asset generator first, so a fresh clone or a CI container produces its own
 artwork — nothing binary is committed.
 
-### Deploying
+### Deploying to Vercel
 
-Set the environment variables above, point `DATABASE_URL` at a managed PostgreSQL, and set
-`STORAGE_DRIVER=s3` with a bucket. Serverless platforms have ephemeral filesystems, so the local
-storage driver only suits a host with a persistent volume.
+The repository is connected to Vercel, so every push to `main` deploys.
 
-The generation route declares `maxDuration = 300`; hosted image models routinely take longer than a
-default serverless timeout allows.
+Three variables belong in **Project → Settings → Environment Variables**:
+
+| Variable | Why |
+|---|---|
+| `AUTH_SECRET` | Signs session JWTs. 32+ random characters. |
+| `DATABASE_URL` | A managed PostgreSQL. Adding **Neon** from the project's Storage tab sets this for you; append `?pgbouncer=true` when using the pooled endpoint. |
+| `NEXT_PUBLIC_APP_URL` | Canonical origin for Open Graph tags, the sitemap and share links. |
+
+Apply the schema to it once, from a machine that can reach it:
+
+```bash
+DATABASE_URL="<production url>" npx prisma db push
+DATABASE_URL="<production url>" npx tsx prisma/seed.ts   # optional demo data
+```
+
+**Uploads need object storage.** A serverless filesystem is ephemeral, so
+`STORAGE_DRIVER=local` cannot keep an upload alive between requests — the app detects the platform
+and fails with that explanation rather than an opaque read-only-filesystem error. Set
+`STORAGE_DRIVER=s3` plus `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, and `S3_ENDPOINT`
+for Cloudflare R2, MinIO or Backblaze B2.
+
+Generation routes declare `maxDuration = 60`, the Hobby-plan ceiling. Raise it to 300 on Pro —
+hosted image models routinely take longer than a minute.
 
 > **Note on fonts.** The interface uses a system font stack (`ui-serif`/`ui-sans-serif`), so it
 > ships no webfonts and has no render-blocking font request. The Open Graph image is rasterised at
-> build time and expects a serif face to be installed — on a bare Linux container, install
-> `fonts-liberation` or swap `og.png` for a static file.
+> build time and needs a serif face on the build container — verified working on Vercel; on a bare
+> minimal container install `fonts-liberation` if the text comes out blank.
 
 ---
 

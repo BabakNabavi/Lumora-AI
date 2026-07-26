@@ -101,12 +101,17 @@ const PAGES = [
   { path: '/this-page-does-not-exist', name: '404' },
 ]
 
+/** AUDIT_PAGES="/,/login" narrows the sweep — useful against a deployment
+ *  where the authenticated pages are not yet configured. */
+const only = process.env.AUDIT_PAGES?.split(',').map((p) => p.trim())
+const TARGETS = only ? PAGES.filter((p) => only.includes(p.path)) : PAGES
+
 console.log(`\nBrowser audit → ${BASE}\n`)
 
 for (const viewport of VIEWPORTS) {
   console.log(`${viewport.name} (${viewport.width}×${viewport.height})`)
 
-  for (const target of PAGES) {
+  for (const target of TARGETS) {
     const page = await browser.newPage()
     await page.setViewport(viewport)
 
