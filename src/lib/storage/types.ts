@@ -60,6 +60,22 @@ export class UnsafeKeyError extends AppError {
 }
 
 /**
+ * The deployment has no usable object store. A 503 with a plain message, so the
+ * client shows something honest instead of a generic failure — while the
+ * specific fix is logged server-side rather than handed to every visitor.
+ */
+export class StorageNotConfiguredError extends AppError {
+  constructor(detail: string) {
+    super(
+      'Image uploads are not configured on this deployment yet.',
+      'storage_not_configured',
+      503,
+    )
+    console.error(`[storage] not configured — ${detail}`)
+  }
+}
+
+/**
  * Keys are always POSIX-style, lower-case, and may not escape their prefix.
  * Enforced centrally so no driver has to re-derive traversal rules.
  */

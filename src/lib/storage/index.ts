@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto'
 import { env } from '@/lib/env'
 import { LocalStorageDriver } from './drivers/local'
 import { S3StorageDriver } from './drivers/s3'
-import { StorageError, type StorageDriver } from './types'
+import { StorageNotConfiguredError, type StorageDriver } from './types'
 
 export * from './types'
 
@@ -28,7 +28,9 @@ export function storage(): StorageDriver {
         !config.S3_ACCESS_KEY_ID ||
         !config.S3_SECRET_ACCESS_KEY
       ) {
-        throw new StorageError(
+        // Half-configured is the same class of problem as unconfigured, and
+        // reaches the user the same way.
+        throw new StorageNotConfiguredError(
           'STORAGE_DRIVER=s3 requires S3_BUCKET, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY.',
         )
       }
@@ -48,7 +50,7 @@ export function storage(): StorageDriver {
       // survive between invocations — an upload written there is gone before
       // it can be read back. Fail with the fix rather than an opaque EROFS.
       if (process.env.VERCEL) {
-        throw new StorageError(
+        throw new StorageNotConfiguredError(
           'STORAGE_DRIVER=local cannot be used on Vercel: the filesystem is ephemeral, so uploads and renders would not survive the request. Set STORAGE_DRIVER=s3 with S3_BUCKET, S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY (AWS S3, Cloudflare R2 and Backblaze B2 all work).',
         )
       }
