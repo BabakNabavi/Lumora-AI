@@ -1,0 +1,195 @@
+// ─────────────────────────────────────────────────────────────────────────────
+//  AI INTERIOR STUDIO — data model
+//
+//  Four concerns, kept deliberately separate:
+//    · identity     User, Account, PasswordResetToken
+//    · product      Design
+//    · AI audit     Generation   (every provider call, success or failure)
+//    · economics    CreditTransaction (append-only ledger)
+//
+//  Credits are never mutated blindly: `User.credits` is a materialised balance
+//  and every change is written as a ledger row in the same transaction, so the
+//  admin panel can always reconstruct how a balance was reached.
+// ─────────────────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Plan {
+  FREE
+  PRO
+}
+
+enum DesignStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum CreditReason {
+  SIGNUP_BONUS
+  GENERATION
+  GENERATION_REFUND
+  PLAN_CHANGE
+  ADMIN_ADJUSTMENT
+}
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  name         String?
+  image        String?
+  passwordHash String?
+
+  role  Role @default(USER)
+  plan  Plan @default(FREE)
+  /// Materialised balance — always written alongside a CreditTransaction row.
+  credits Int @default(5)
+
+  emailVerifiedAt DateTime?
+  lastLoginAt     DateTime?
+
+  accounts     Account[]
+  designs      Design[]
+  generations  Generation[]
+  transactions CreditTransaction[]
+  resetTokens  PasswordResetToken[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("users")
+}
+
+/// One row per external identity provider linked to a user.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  provider          String
+  providerAccountId String
+  accessToken       String?
+  refreshToken      String?
+  expiresAt         Int?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Design {
+  id     String  @id @default(cuid())
+  userId String?
+
+  title String
+
+  // Catalog selections — stored as ids so the catalog stays the source of truth.
+  roomType String
+  style    String
+  palette  String
+  lighting String
+  mood     String
+
+  // Storage keys, resolved to URLs by the storage driver at read time.
+  originalKey String
+  resultKey   String?
+
+  width  Int?
+  height Int?
+
+  status DesignStatus @default(PENDING)
+
+  /// One-paragraph AI narrative shown on the result page.
+  description String?
+  /// Bullet insights: [{ title, body }]
+  insights Json?
+
+  isFavorite Boolean @default(false)
+  shareId    String? @unique
+
+  // Optional so a guest-demo generation can exist before an account does.
+  user        User?        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generations Generation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([userId, isFavorite])
+  @@index([status])
+  @@map("designs")
+}
+
+/// Audit trail for every AI provider call — powers the admin usage reports.
+model Generation {
+  id       String  @id @default(cuid())
+  userId   String?
+  designId String?
+
+  provider   String
+  model      String?
+  prompt     String?
+  status     DesignStatus @default(PENDING)
+  durationMs Int?
+  creditsUsed Int         @default(1)
+  error      String?
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  design Design? @relation(fields: [designId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([provider, createdAt])
+  @@index([createdAt])
+  @@map("generations")
+}
+
+/// Append-only ledger. `amount` is signed; `balanceAfter` is the running total.
+model CreditTransaction {
+  id     String @id @default(cuid())
+  userId String
+
+  amount       Int
+  balanceAfter Int
+  reason       CreditReason
+  note         String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("credit_transactions")
+}

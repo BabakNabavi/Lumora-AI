@@ -1,0 +1,326 @@
+{
+  "rooms": [
+    {
+      "id": "living-room",
+      "name": "Living Room",
+      "description": "Open, social, anchored by seating and light.",
+      "scene": { "kind": "living", "windows": 2, "plants": 2 }
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom",
+      "description": "Restful, layered textiles, soft horizontal lines.",
+      "scene": { "kind": "bedroom", "windows": 1, "plants": 1 }
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "description": "Functional geometry, continuous surfaces, task light.",
+      "scene": { "kind": "kitchen", "windows": 1, "plants": 1 }
+    },
+    {
+      "id": "dining-room",
+      "name": "Dining Room",
+      "description": "A centred table, a pendant, and room to gather.",
+      "scene": { "kind": "dining", "windows": 2, "plants": 1 }
+    },
+    {
+      "id": "office",
+      "name": "Office",
+      "description": "Focused, orderly, built around a working surface.",
+      "scene": { "kind": "office", "windows": 1, "plants": 2 }
+    },
+    {
+      "id": "bathroom",
+      "name": "Bathroom",
+      "description": "Wet-room materials, vertical rhythm, calm reflections.",
+      "scene": { "kind": "bathroom", "windows": 1, "plants": 1 }
+    },
+    {
+      "id": "outdoor",
+      "name": "Outdoor",
+      "description": "Terrace living — shade, stone, and planting.",
+      "scene": { "kind": "outdoor", "windows": 0, "plants": 4 }
+    }
+  ],
+
+  "styles": [
+    {
+      "id": "modern",
+      "name": "Modern",
+      "tagline": "Clean lines, honest materials",
+      "description": "Uncluttered volumes, low-profile furniture and a disciplined material palette. Nothing decorative that isn't also structural.",
+      "keywords": ["low-profile seating", "matte lacquer", "planar surfaces", "concealed storage"],
+      "render": {
+        "wall": "#EDE9E3",
+        "ceiling": "#F6F3EE",
+        "floor": "#C4B5A2",
+        "wood": "#A98B68",
+        "textile": "#8E8A83",
+        "accent": "#2E2C29",
+        "metal": "#9C9A96",
+        "plant": "#6E7B62"
+      },
+      "transform": { "hue": 0, "saturation": 0.94, "brightness": 1.04, "contrast": 1.14, "tint": "#F2EFEA", "tintAlpha": 0.1, "sharpen": 1.1, "vignette": 0.14 }
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "tagline": "Everything essential, nothing more",
+      "description": "Negative space treated as a material. A near-monochrome envelope, one or two objects allowed to matter.",
+      "keywords": ["negative space", "hidden joinery", "single-tone envelope", "quiet objects"],
+      "render": {
+        "wall": "#F4F2EE",
+        "ceiling": "#FAF8F5",
+        "floor": "#DED6C9",
+        "wood": "#C4AE92",
+        "textile": "#E2DDD5",
+        "accent": "#4A4742",
+        "metal": "#B8B5B0",
+        "plant": "#7E886F"
+      },
+      "transform": { "hue": -2, "saturation": 0.8, "brightness": 1.09, "contrast": 1.05, "tint": "#FBF9F6", "tintAlpha": 0.16, "sharpen": 0.7, "vignette": 0.08 }
+    },
+    {
+      "id": "luxury",
+      "name": "Luxury",
+      "tagline": "Deep materials, considered restraint",
+      "description": "Stone with movement, brushed brass, velvet and lacquer. Richness delivered through material depth rather than ornament.",
+      "keywords": ["book-matched stone", "brushed brass", "velvet upholstery", "layered lighting"],
+      "render": {
+        "wall": "#E4DCCF",
+        "ceiling": "#F0E9DD",
+        "floor": "#8A6F52",
+        "wood": "#6B4E33",
+        "textile": "#5C5646",
+        "accent": "#1E1B17",
+        "metal": "#B99457",
+        "plant": "#5F6B54"
+      },
+      "transform": { "hue": 4, "saturation": 1.1, "brightness": 0.99, "contrast": 1.22, "tint": "#C7A778", "tintAlpha": 0.12, "sharpen": 1.3, "vignette": 0.3 }
+    },
+    {
+      "id": "scandinavian",
+      "name": "Scandinavian",
+      "tagline": "Pale wood, generous daylight",
+      "description": "Light oak, chalk walls and wool. Built for long winters — every surface returns light back into the room.",
+      "keywords": ["light oak", "chalk white walls", "wool and linen", "tapered legs"],
+      "render": {
+        "wall": "#F6F4F0",
+        "ceiling": "#FBFAF7",
+        "floor": "#DCC7A8",
+        "wood": "#D3B78F",
+        "textile": "#D9D3C7",
+        "accent": "#3B3833",
+        "metal": "#ADA9A2",
+        "plant": "#7C8A6B"
+      },
+      "transform": { "hue": -4, "saturation": 0.86, "brightness": 1.12, "contrast": 1.06, "tint": "#F7F4EE", "tintAlpha": 0.18, "sharpen": 0.9, "vignette": 0.06 }
+    },
+    {
+      "id": "industrial",
+      "name": "Industrial",
+      "tagline": "Structure left visible",
+      "description": "Board-formed concrete, blackened steel and reclaimed timber. The building's bones are the finish.",
+      "keywords": ["exposed concrete", "blackened steel", "reclaimed timber", "open ceiling"],
+      "render": {
+        "wall": "#B9B4AC",
+        "ceiling": "#A29D95",
+        "floor": "#8F8A83",
+        "wood": "#8A6A48",
+        "textile": "#6E6A64",
+        "accent": "#25231F",
+        "metal": "#5A5854",
+        "plant": "#67735A"
+      },
+      "transform": { "hue": -6, "saturation": 0.72, "brightness": 0.95, "contrast": 1.26, "tint": "#8E8B85", "tintAlpha": 0.14, "sharpen": 1.5, "vignette": 0.26 }
+    },
+    {
+      "id": "japandi",
+      "name": "Japandi",
+      "tagline": "Japanese calm, Nordic warmth",
+      "description": "Low horizons, paper-diffused light, matte clay plaster. Restraint that reads as warmth, not austerity.",
+      "keywords": ["low horizon", "clay plaster", "paper-diffused light", "hand-finished wood"],
+      "render": {
+        "wall": "#E9E2D6",
+        "ceiling": "#F2EDE3",
+        "floor": "#C0AB8E",
+        "wood": "#9C7F5C",
+        "textile": "#CBC3B4",
+        "accent": "#33302A",
+        "metal": "#8E8A82",
+        "plant": "#6C7A5E"
+      },
+      "transform": { "hue": 3, "saturation": 0.9, "brightness": 1.05, "contrast": 1.08, "tint": "#E8DDCB", "tintAlpha": 0.15, "sharpen": 0.8, "vignette": 0.16 }
+    },
+    {
+      "id": "classic",
+      "name": "Classic",
+      "tagline": "Proportion, symmetry, craft",
+      "description": "Panelled walls, cornices and a symmetrical plan. Traditional detailing handled with a contemporary eye.",
+      "keywords": ["wall panelling", "cornice detail", "symmetrical plan", "aged brass"],
+      "render": {
+        "wall": "#E7E0D2",
+        "ceiling": "#F4EFE4",
+        "floor": "#9B7B58",
+        "wood": "#7E5F40",
+        "textile": "#8B8571",
+        "accent": "#2A2722",
+        "metal": "#A98C56",
+        "plant": "#63705A"
+      },
+      "transform": { "hue": 5, "saturation": 1.02, "brightness": 1.01, "contrast": 1.12, "tint": "#D8C4A2", "tintAlpha": 0.13, "sharpen": 1.0, "vignette": 0.22 }
+    },
+    {
+      "id": "contemporary",
+      "name": "Contemporary",
+      "tagline": "Sculptural, current, gallery-like",
+      "description": "Curved volumes, plaster finishes and a single sculptural gesture per room. Reads like a gallery you can live in.",
+      "keywords": ["curved volumes", "lime plaster", "sculptural lighting", "gallery hanging"],
+      "render": {
+        "wall": "#EFEBE4",
+        "ceiling": "#F8F5F0",
+        "floor": "#CBBCA8",
+        "wood": "#B08F6B",
+        "textile": "#B6AFA3",
+        "accent": "#232120",
+        "metal": "#A6A29B",
+        "plant": "#72806A"
+      },
+      "transform": { "hue": 1, "saturation": 0.97, "brightness": 1.06, "contrast": 1.16, "tint": "#EFE7DC", "tintAlpha": 0.11, "sharpen": 1.2, "vignette": 0.12 }
+    }
+  ],
+
+  "palettes": [
+    {
+      "id": "warm",
+      "name": "Warm",
+      "description": "Amber, terracotta and toasted linen.",
+      "swatches": ["#B9825C", "#D9B08C", "#EBD9C3", "#8C5F41", "#F6EDE2"],
+      "transform": { "hue": 6, "saturation": 1.12, "brightness": 1.02, "tint": "#D9A876", "tintAlpha": 0.12 }
+    },
+    {
+      "id": "neutral",
+      "name": "Neutral",
+      "description": "Greige, bone and soft shadow.",
+      "swatches": ["#B7B0A6", "#D5CEC4", "#EFEAE3", "#8B857C", "#FAF8F5"],
+      "transform": { "hue": 0, "saturation": 0.88, "brightness": 1.04, "tint": "#E6E1D9", "tintAlpha": 0.1 }
+    },
+    {
+      "id": "dark",
+      "name": "Dark",
+      "description": "Charcoal, graphite and low-key contrast.",
+      "swatches": ["#2F2D2A", "#4A4741", "#6B6760", "#1A1917", "#8E8A83"],
+      "transform": { "hue": -3, "saturation": 0.82, "brightness": 0.86, "tint": "#3B3936", "tintAlpha": 0.2 }
+    },
+    {
+      "id": "earthy",
+      "name": "Earthy",
+      "description": "Clay, olive and unbleached stone.",
+      "swatches": ["#8E7A5E", "#A3A183", "#C9BCA3", "#6B6448", "#E4DAC6"],
+      "transform": { "hue": 8, "saturation": 1.06, "brightness": 0.99, "tint": "#9C8A63", "tintAlpha": 0.15 }
+    },
+    {
+      "id": "monochrome",
+      "name": "Monochrome",
+      "description": "One hue, many values.",
+      "swatches": ["#1D1C1A", "#55534F", "#8D8A85", "#C4C1BC", "#F1EFEC"],
+      "transform": { "hue": 0, "saturation": 0.28, "brightness": 1.02, "tint": "#E9E7E4", "tintAlpha": 0.1 }
+    }
+  ],
+
+  "lighting": [
+    {
+      "id": "natural",
+      "name": "Natural",
+      "description": "Even daylight from a large opening.",
+      "transform": { "brightness": 1.08, "gamma": 1.0, "contrast": 1.02, "warmth": 0, "vignette": 0.05, "bloom": 0.12 }
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "description": "Low-temperature lamps, late afternoon.",
+      "transform": { "brightness": 1.03, "gamma": 0.96, "contrast": 1.06, "warmth": 10, "vignette": 0.16, "bloom": 0.22 }
+    },
+    {
+      "id": "dramatic",
+      "name": "Dramatic",
+      "description": "Directional light, deep falloff.",
+      "transform": { "brightness": 0.93, "gamma": 1.12, "contrast": 1.3, "warmth": 4, "vignette": 0.4, "bloom": 0.3 }
+    },
+    {
+      "id": "soft",
+      "name": "Soft",
+      "description": "Diffused, shadowless, overcast.",
+      "transform": { "brightness": 1.06, "gamma": 0.94, "contrast": 0.94, "warmth": 2, "vignette": 0.03, "bloom": 0.16 }
+    }
+  ],
+
+  "moods": [
+    {
+      "id": "calm",
+      "name": "Calm",
+      "description": "Quiet, low-contrast, breathing room.",
+      "adjectives": ["composed", "unhurried", "restful"],
+      "transform": { "saturation": 0.92, "contrast": 0.96, "sharpen": 0.6 }
+    },
+    {
+      "id": "luxury",
+      "name": "Luxury",
+      "description": "Deep, tactile, materially rich.",
+      "adjectives": ["considered", "tactile", "sophisticated"],
+      "transform": { "saturation": 1.06, "contrast": 1.14, "sharpen": 1.3 }
+    },
+    {
+      "id": "cozy",
+      "name": "Cozy",
+      "description": "Enveloping, warm, layered.",
+      "adjectives": ["enveloping", "soft", "lived-in"],
+      "transform": { "saturation": 1.08, "contrast": 1.0, "sharpen": 0.7 }
+    },
+    {
+      "id": "minimal",
+      "name": "Minimal",
+      "description": "Reduced, precise, uncluttered.",
+      "adjectives": ["precise", "reduced", "uncluttered"],
+      "transform": { "saturation": 0.84, "contrast": 1.04, "sharpen": 1.0 }
+    },
+    {
+      "id": "bold",
+      "name": "Bold",
+      "description": "High contrast, decisive gestures.",
+      "adjectives": ["confident", "graphic", "decisive"],
+      "transform": { "saturation": 1.16, "contrast": 1.24, "sharpen": 1.5 }
+    }
+  ],
+
+  "plans": [
+    {
+      "id": "free",
+      "name": "Free",
+      "price": 0,
+      "credits": 5,
+      "tagline": "Explore the studio",
+      "features": [
+        "5 AI generations",
+        "Full style and palette library",
+        "Before / after comparison",
+        "Download at standard resolution"
+      ]
+    },
+    {
+      "id": "pro",
+      "name": "Pro",
+      "price": 24,
+      "credits": 100,
+      "tagline": "For continuous work",
+      "features": [
+        "100 AI generations per month",
+        "Priority generation queue",
+        "High-resolution downloads",
+        "Unlimited saved projects",
+        "Shareable project links"
+      ]
+    }
+  ]
+}
